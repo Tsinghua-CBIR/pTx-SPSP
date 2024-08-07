@@ -13,3 +13,31 @@ Other organizations are allowed to use this software only for evaluation purpose
 One may make copies of the software for their use provided that the copies, are not sold or distributed, are used under the same terms and conditions. 
 As unestablished research software, this code is provided on an "as is'' basis without warranty of any kind, either expressed or implied. 
 The downloading, or executing any part of this software constitutes an implicit agreement to these terms. These terms and conditions are subject to change at any time without prior notice.
+
+### About the demo
+
+You can use showPulse() to see the designed RF and Grad
+
+```matlab
+showPulse(rf,grad,RF_duration,dt);
+```
+
+![fig1](.\results\fig1.JPG)
+
+```matlab
+offset = -100;%%% To see the robustness to off-resonance
+%%% As in the paper, you may change offset to 0 and ±100
+showPerform(ID,rf,grad,dt, offset,RFA);
+```
+
+And use showPerform() to reproduce the water-excitation results.
+
+![fig2](.\results\fig2.JPG)
+
+For further validation, use showFrequencyRes() to see the amazing frequency-responce curve!
+
+```matlab
+showFrequencyRes(ID,rf,grad,dt,RFA);
+```
+
+![fig3](.\results\fig3.JPG)
