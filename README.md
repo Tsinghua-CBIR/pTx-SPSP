@@ -22,7 +22,7 @@ You can use showPulse() to see the designed RF and Grad
 showPulse(rf,grad,RF_duration,dt);
 ```
 
-![fig1](.\results\fig1.JPG)
+![fig1](results/fig1.JPG)
 
 ```matlab
 offset = -100;%%% To see the robustness to off-resonance
@@ -32,7 +32,7 @@ showPerform(ID,rf,grad,dt, offset,RFA);
 
 And use showPerform() to reproduce the water-excitation results.
 
-![fig2](.\results\fig2.JPG)
+![fig2](results/fig2.JPG)
 
 For further validation, use showFrequencyRes() to see the amazing frequency-responce curve!
 
@@ -40,4 +40,4 @@ For further validation, use showFrequencyRes() to see the amazing frequency-resp
 showFrequencyRes(ID,rf,grad,dt,RFA);
 ```
 
-![fig3](.\results\fig3.JPG)
+![fig3](results/fig3.JPG)
