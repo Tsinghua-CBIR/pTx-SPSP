@@ -1,6 +1,7 @@
 # pTx-SPSP
 This is a matlab toolbox for designing parallel transmit (pTx) spatial spectral (SPSP) RF pulses for high and ultra-high field MRI.
 You may run the demo script, `demo.m`, to grab an idea of how this toolbox can be used to design pTx SPSP pulses to create robust uniform water-selective excitation across the entire human brain at 7 Tesla. 
+Our pulse design algorithm involves two-step optimization, with the optimization in step 1 relying on the CMA-ES (Covariance Matrix Adaptation Evolution Strategy) and being achieved using the code generously shared at https://cma-es.github.io/. 
 
 If you use the toolbox, please consider citing the following paper:
 
