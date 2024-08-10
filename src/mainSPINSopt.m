@@ -92,16 +92,16 @@ foptSPINSos(hpSPINS,wt0);
 %%% Here you could optimize hpSPINS together, but as it will slow down the
 %%% caculation, we do not recommend you to do that in the demo.
 
-vx0 = [real(wt);imag(wt)];
+vx2 = [real(wt);imag(wt)];
 disp('ADMM, please wait for a while');
 while (1) 
     %%% local SAR update
-    vx2 = vx0;
-    fun = @(x)SARupdate(x,vx2);
+    vx0 = vx2;
+    fun = @(x)SARupdate(x,vx0);
     nonlcon = @(x)SARcon(x,TR,RFA,dt);
     iter = 10;
     options = optimoptions('fmincon','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
-    vx1 = fmincon(fun,vx2,[],[],[],[],[],[],nonlcon,options);
+    vx1 = fmincon(fun,vx0,[],[],[],[],[],[],nonlcon,options);
 
     %%% FA update
     fun = @(x)FAIupdate(x,vx1);

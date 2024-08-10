@@ -16,7 +16,7 @@ The downloading, or executing any part of this software constitutes an implicit 
 
 ### About the demo
 
-You can use showPulse() to see the designed RF and Grad
+You can use showPulse() to check the designed RF and Grad.
 
 ```matlab
 showPulse(rf,grad,RF_duration,dt);
@@ -30,7 +30,7 @@ offset = -100;%%% To see the robustness to off-resonance
 showPerform(ID,rf,grad,dt, offset,RFA);
 ```
 
-And use showPerform() to reproduce the water-excitation results.
+And use showPerform() to reproduce the water-excitation results. Shown are uniform water-excitation (left) and robust fat-suppression (right) at a -100Hz offset.
 
 ![fig2](results/fig2.JPG)
 

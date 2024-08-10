@@ -4,7 +4,10 @@ function [rf,grad,localSAR] = design_SPINS_rf(ID, RF_duration, dt, TR, RFA)
 % Inputs:
 %   ID (int) - serial number of calibration, set here so the function
 %   could be easily extended to UP training.
-%   RF_duration (double) - Duration of the RF pulse, default to 2.88 ms
+%   RF_duration (double) - Duration of the RF pulse, default to 2.88e-3s
+%   dt (double) - Dwell time, default to 10e-6s
+%   TR (double) - Repetition time, default to 50e-3s
+%   RFA - Round flip angle , default ernstAngle at 7T
 %
 % Outputs:
 %   rf, grad, localSAR - Resulting RF & grad pulse based on the input parameters, and
@@ -13,7 +16,7 @@ function [rf,grad,localSAR] = design_SPINS_rf(ID, RF_duration, dt, TR, RFA)
 % Example:
 %   result = design_SPINS_rf(); % Uses default parameters
 %   result = design_SPINS_rf(5,2.88,10e-6,50e-3,ernstAngle(50e-3)); % Uses custom parameters. Pay
-%   attention the RF_dutation can not be changed in the version 1.0.
+%   attention the RF_duration can not be changed in the version 1.0.
 
 % Set default values
 if nargin < 1

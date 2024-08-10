@@ -4,7 +4,10 @@ function [rf,grad,localSAR] = design_pTxSPSP_RF(ID, RF_duration, dt, TR, RFA, ty
 % Inputs:
 %   ID (int) - serial number of calibration, set here so the function
 %   could be easily extended to UP training.
-%   RF_duration (double) - Duration of the RF pulse, default to 2.88 ms
+%   RF_duration (double) - Duration of the RF pulse, default to 2.88e-3s
+%   dt (double) - Dwell time, default to 10e-6s
+%   TR (double) - Repetition time, default to 50e-3s
+%   RFA - Round flip angle , default ernstAngle at 7T
 %   type (string) - Type of RF pulse, default to 'SPINS'
 %
 % Outputs:
