@@ -1,2 +1,3 @@
-*.dat
-*.ini
+process/*.dat
+process/*.mat
+results/*.ini
