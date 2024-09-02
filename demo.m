@@ -18,21 +18,23 @@ TR = 50e-3; %%% repetition time, s, used in SAR-constraint.
 RFA = round(ernstAngle(TR)); %%% round: the vendor-provided FA is integer
 
 % design with kT point parameterization 
-% [rf,grad,localSAR] = design_pTxSPSP_RF(trainID,RF_duration,dt,TR,RFA,'KT');
+[rf,grad,localSAR] = design_pTxSPSP_RF(trainID,RF_duration,dt,TR,RFA,'KT');
 % design with SPINS parameterization 
-[rf,grad,localSAR] = design_pTxSPSP_RF(trainID,RF_duration,dt,TR,RFA,'SPINS');
+% [rf,grad,localSAR] = design_pTxSPSP_RF(trainID,RF_duration,dt,TR,RFA,'SPINS');
 
 showPulse(rf,grad,RF_duration,dt);
 offset = 100;%%% To check the robustness to off-resonance
 %%% As in the paper, you may change offset to 0 and ±100Hz and even ±200Hz
 %%% pTx-SPSP water-excitation pulse is  quite robust to off-resonances 
 
-testID = 1;
+testID = trainID(1);
+%%% people usually forget to change this when designing subject-specific
+%%% pulse, so default the same to trainID here.
 showPerform(testID,rf,grad,dt,offset,RFA);
 
 %%% To see the frequency responce if you want
 %%% warning: may take some time
-% showFrequencyRes(testID,rf,grad,dt,RFA);
+showFrequencyRes(testID,rf,grad,dt,RFA);
 
 %%% Output to ini file
 outputfile(rf,grad);

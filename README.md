@@ -17,6 +17,19 @@ The downloading, or executing any part of this software constitutes an implicit 
 
 ### About the demo
 
+Set up training list and start your pTx-SPSP pulse design
+
+```matlab
+trainID = [1]; %%% serial number of calibration
+%%% Tips: put more than one number here for universal pulse training;
+%%% The universal pulse calculation is still under development for this open-source version right now.
+RF_duration = 2.88e-3; %%% duration of the RF pulse, can not be changed the this version
+dt = 10e-6; %%% dwell time, s, can not be changed in the demo
+TR = 50e-3; %%% repetition time, s, used in SAR-constraint.
+RFA = round(ernstAngle(TR)); %%% round: the vendor-provided FA is integer
+[rf,grad,localSAR] = design_pTxSPSP_RF(trainID,RF_duration,dt,TR,RFA,'SPINS');
+```
+
 You can use showPulse() to check the designed RF and Grad.
 
 ```matlab

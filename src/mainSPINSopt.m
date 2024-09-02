@@ -111,6 +111,13 @@ while (1)
     vx2 = fmincon(fun,vx1,[],[],[],[],[],[],nonlcon,options);
     lenv = round(length(vx2)/2);
     wt = vx2(1:lenv)+1i*vx2(lenv+1:end);
+    
+    tempx = wt;
+    fun = @(theta)foptSPINSfixX(theta,tempx);
+    nonlcon = @holds;
+    iter = 1;
+    options = optimoptions('fmincon','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
+    hpSPINS = fmincon(fun,hpSPINS,[],[],[],[],[],[],nonlcon,options);
     %%% we've got a good startpoint, so we don't want to go far away from it.
     %%% Thus we used a large weight on |vx1-vx2| to keep the parameters
     %%% from changing too far
