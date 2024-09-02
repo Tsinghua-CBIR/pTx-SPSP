@@ -2,7 +2,7 @@ function [rf,grad,localSAR] = design_SPINS_rf(ID, RF_duration, dt, TR, RFA)
 % rf_design_function - MATLAB function for designing a non-selective pTx-SPSP SPINS RF pulse
 %
 % Inputs:
-%   ID (int) - serial number of calibration, set here so the function
+%   ID (array) - serial number of calibration, set here so the function
 %   could be easily extended to UP training.
 %   RF_duration (double) - Duration of the RF pulse, default to 2.88e-3s
 %   dt (double) - Dwell time, default to 10e-6s
@@ -20,7 +20,7 @@ function [rf,grad,localSAR] = design_SPINS_rf(ID, RF_duration, dt, TR, RFA)
 
 % Set default values
 if nargin < 1
-    ID = 5;
+    ID = [1];
 end
 if nargin < 2
     RF_duration = 2.88e-3;
@@ -38,8 +38,12 @@ nKT = 12;%%% accelarating facotr for SPINS
 nchs = 8;%%% number of channel, considering commonly used Nova 8-ch transmit
 %%% if you want to use another tranmit coil, just remember to change "nchs"
 %%% in all the files.
-load SPINS_X0.mat %%% optimal startpoint
-[theta,vx0] = mainSPINSopt(ID,RF_duration, X0, dt, TR, RFA); %%% step1: reduced problem solve
+load SPINS_X0.mat X0 %%% optimal startpoint
+if length(ID) == 1 %%%subject specific (need to be quick), premalloc optimization & pre calculation used
+    [theta,vx0] = mainSPINSopt(ID(1),RF_duration, X0, dt, TR, RFA); %%% step1: reduced problem solve
+else %%% universal pulse training, no acceleration here
+    
+end
 
 rf = vx0;
 % vx0 = repelem(vx0,nKT,1);
@@ -76,6 +80,6 @@ grad = dkval/gamma/dt;
 grad = [zeros(3,2),grad];
 rf = [zeros(8,1),rf];
 
-
-localSAR = localSARcom(rf*RFA*1e6,TR,dt);;
+rf = RFA*rf*1e6; grad = grad*1e3; %%% uV->V, T->mT
+localSAR = localSARcom(rf,TR,dt);
 end

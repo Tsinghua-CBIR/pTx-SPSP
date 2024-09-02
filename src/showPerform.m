@@ -20,7 +20,9 @@ mxypat = run_bloch_sim (myrf,mygrad,b1mapsMSn,maskMS,foxkt,b0mapMS-(0+offset)/(g
 
 vec = asin(abs(mxypat(maskMS)));
 Cov = std(vec)/mean(vec); %%% COV output here
+disp('%--------------------------------%');
 fprintf('Bloch simulated CoV:%d \n',Cov);
+disp('%--------------------------------%');
 
 
 Img = cell(3,3);
@@ -44,7 +46,7 @@ colormap hot;
 axis image;
 
 mxypat = run_bloch_sim (myrf,mygrad,b1mapsMSn,maskMS,foxkt,b0mapMS+(1050+offset)/(gamma/2/pi),...
-    0,[],dt,poffset);%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%PLUS! left hand system for Siemens!
+    0,[],dt,poffset);%%%%%%%%%%%%%%%%%%%%%%%%%%%%%PLUS!!! left hand system (xyz2PRS) for Siemens!
 
 
 Img = cell(3,3);

@@ -2,7 +2,7 @@ function [rf,grad,localSAR] = design_KT_rf(ID, RF_duration, dt, TR, RFA)
 % rf_design_function - MATLAB function for designing a non-selective pTx-SPSP KT-points RF pulse
 %
 % Inputs:
-%   ID (int) - serial number of calibration, set here so the function
+%   ID (array) - serial number of calibration, set here so the function
 %   could be easily extended to UP training.
 %   RF_duration (double) - Duration of the RF pulse, default to 2.88e-3s
 %   dt (double) - Dwell time, default to 10e-6s
@@ -20,7 +20,7 @@ function [rf,grad,localSAR] = design_KT_rf(ID, RF_duration, dt, TR, RFA)
 
 % Set default values
 if nargin < 1
-    ID = 5;
+    ID = [1];
 end
 if nargin < 2
     RF_duration = 2.88e-3;
@@ -35,8 +35,11 @@ if nargin < 5
     RFA = 13;
 end
 
-load KT_X0
-[theta,vx0] = mainKTopt(ID,RF_duration, xmin, dt, TR, RFA); %%% step1: reduced problem solve
+load KT_X0 xmin
+if length(ID) == 1 %%%subject specific (need to be quick), premalloc optimization & pre calculation used
+    [theta,vx0] = mainKTopt(ID(1),RF_duration, xmin, dt, TR, RFA); %%% step1: reduced problem solve
+else %%% universal pulse training, no acceleration here
+end
 kp = reshape(theta,[3,24]);
 nchs = 8;
 nKT = size(kp,2);
@@ -104,5 +107,6 @@ end
 grad = [zeros(3,1),mygrad];
 rf = [zeros(8,1),myrf];
 
-localSAR = localSARcom(rf*RFA*1e6,TR,dt);
+rf = RFA*rf*1e6; grad = grad*1e3; %%% uV->V, T->mT
+localSAR = localSARcom(rf,TR,dt);
 end

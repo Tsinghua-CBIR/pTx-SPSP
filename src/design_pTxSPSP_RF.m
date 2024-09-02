@@ -2,7 +2,7 @@ function [rf,grad,localSAR] = design_pTxSPSP_RF(ID, RF_duration, dt, TR, RFA, ty
 % rf_design_function - MATLAB function for designing a non-selective pTx-SPSP RF pulse
 %
 % Inputs:
-%   ID (int) - serial number of calibration, set here so the function
+%   ID (array) - serial number of calibration, set here so the function
 %   could be easily extended to UP training.
 %   RF_duration (double) - Duration of the RF pulse, default to 2.88e-3s
 %   dt (double) - Dwell time, default to 10e-6s
@@ -21,7 +21,7 @@ function [rf,grad,localSAR] = design_pTxSPSP_RF(ID, RF_duration, dt, TR, RFA, ty
 
 % Set default values
 if nargin < 1
-    ID = 5;
+    ID = [1];
 end
 if nargin < 2
     RF_duration = 2.88e-3;

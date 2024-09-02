@@ -1,7 +1,7 @@
-function [hpSPINS,wt] = mainKTSopt(ID,RF_duration,X0, dt, TR, RFA)
+function [hpKT,wt] = mainKTdopt(ID,RF_duration,X0, dt, TR, RFA)
 
 addpath('src');
-trainID = [ID];
+trainID = ID;
 num = length(trainID);
 UA = cell(num,1);
 Ub = cell(num,1);
@@ -62,7 +62,7 @@ stopband = -1300:125:-800;
 point_P = length(passband);
 point_S = length(stopband);
 
-%%%流氓写法，这里为了提高一点点速度牺牲了可迁移性
+%%%Prr
 A = complex(zeros((point_P+point_S)*nspa,nchs*nKT));
 b = [(1/180)*pi*ones(point_P*nspa,1);zeros(point_S*nspa,1)];
 
@@ -79,53 +79,62 @@ for i = 1:8
 end
 kp_ini = reshape(temp,[24,1]);
 kp_ini = X0;
-% foptKT(kp_ini)
 
 OPTS=cmaes; 
 % OPTS.DiagonalOnly = 0;
 OPTS.CMA.active = 2;
 OPTS.StopFitness=1e-5;
 OPTS.StopIter = 1000;
+OPTS.StopFunEvals = 1e-1;
 OPTS.LogFilenamePrefix = 'process/outcmaes';
 OPTS.SaveFilename = 'process/variablescmaes.mat';
 % opts.DispModulo = 10;
 % OPTS.PopSize = 20;
 % XP = cmaes('fun',enlargeX0,50,OPTS);
-hpSPINS = cmaes('foptKT',kp_ini,20,OPTS);
+hpKT = cmaes('foptKT',kp_ini,10,OPTS);
 
 %% Get Start-point and execute ADMM
-hpSPINS = X0;%%%just for test, you can delete it.
-%%% X0 is pretrained optimal startpoint (universal)
-foptKT(hpSPINS);
-%%% Here you could optimize hpSPINS together, but as it will slow down the
-%%% caculation, we do not recommend you to do that in the demo.
-
+hpKT = X0;%%%just for test, you can delete it.
+foptKT(hpKT);
 vx2 = [real(wt);imag(wt)];
+disp(' ');
 disp('ADMM, please wait for a while');
 while (1) 
     %%% local SAR update
     vx0 = vx2;
-    fun = @(x)SARupdate(x,vx0);
-    nonlcon = @(x)SARconKT(x,TR,RFA,dt);
-    iter = 10;
-    options = optimoptions('fmincon','Display','iter','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
-    vx1 = fmincon(fun,vx0,[],[],[],[],[],[],nonlcon,options);
+    vx1 = localSARupKT(vx0,TR,RFA,dt);
 
     %%% FA update
     fun = @(x)FAIupdate(x,vx1);
     nonlcon = @holds;
     iter = 10;
-    options = optimoptions('fmincon','Display','iter','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
+    options = optimoptions('fmincon','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
     vx2 = fmincon(fun,vx1,[],[],[],[],[],[],nonlcon,options);
     lenv = round(length(vx2)/2);
     wt = vx2(1:lenv)+1i*vx2(lenv+1:end);
+    
+    tempx = wt;
+    fun = @(theta)foptKTfixX(theta,tempx);
+    nonlcon = @holds;
+    iter = 1;
+    options = optimoptions('fmincon','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
+    hpKT = fmincon(fun,hpKT,[],[],[],[],[],[],nonlcon,options);
     %%% we've got a good startpoint, so we don't want to go far away from it.
     %%% Thus we used a large weight on |vx1-vx2| to keep the parameters
     %%% from changing too far
     %%% 
-    if sum(abs(vx2-vx0))<1e-7 %%% quit loop 
+    if sum(abs(vx2-vx1))^2<1e-5 %%% quit loop 
         break
     end
 end
 
+
+kp = zeros(3,24);
+
+for group = 1:8
+    kp(:,group*3-2) = zeros(3,1);
+    kp(:,group*3-1) = -hpKT(group*3-2:group*3);
+    kp(:,group*3) = hpKT(group*3-2:group*3);
+end
+hpKT = kp;
 end

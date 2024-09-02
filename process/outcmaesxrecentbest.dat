@@ -1,2 +1,2 @@
-%  columns="iteration, evaluation, fitness, void, void, xrecentbest" (startseed=213281, 2024/08/10 20:34:36.82)
-1 9  5.948495342519833501e-02 0 0 2.273132e+01 2.574492e+01 -8.794382e-01 -1.542536e+01 -2.991208e+00 
+%  columns="iteration, evaluation, fitness, void, void, xrecentbest" (startseed=212689, 2024/09/2 22:16:53.89)
+1 9  3.972667152729467133e-02 0 0 1.512107e+01 3.603262e+01 -4.595575e+00 -1.985700e+00 7.673074e+00 

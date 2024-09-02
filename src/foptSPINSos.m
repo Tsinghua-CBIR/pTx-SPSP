@@ -56,11 +56,9 @@ for i = 1:point_S
 end
 
 % Solve the reduced problem
- [wt,~,~]= solve_mlstr(A,b,1500,1e-5,wt0);
+ [wt,~,~]= solve_mlstr(A,b,1500,1e-5);
 
-wt1 = wt;
-% 1000*(wt1'*wt1)
+ 
 
-kpmse = (abs(A*wt1)-abs(b))'*(abs(A*wt1)-abs(b));
 % toc;
 end

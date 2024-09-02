@@ -70,14 +70,16 @@ OPTS.SaveFilename = 'process/variablescmaes.mat';
 % OPTS.PopSize = 32;
 % XP = cmaes('fun',enlargeX0,50,OPTS);
 tp = cmaes('foptSPINS',X0,10,OPTS);
+wt = repelem(wt,12,1);
 % tp = cmaes('foptSPINS',[20,8/2.88*6,2/2.88*30,20,20],10,OPTS);
 addpath('process/');
 load('process/variablescmaes.mat');
 hpSPINS = xmin;
 
 
+
 %% Get Start-point and execute ADMM
-wt0 = repelem(wt,12,1);
+wt0 = wt;
 nKT = round(T/dt);
 A = complex(zeros((point_P+point_S)*nspa,nchs*nKT));
 b = [(1/180)*pi*ones(point_P*nspa,1);zeros(point_S*nspa,1)];
@@ -87,21 +89,19 @@ off = b0mapMS(maskMS)*kb0(phasetrack);
 trel = 1/(gamma/2/pi)*kb0(phasetrack);
 sysmat = complex(zeros(nspa,nchs*nKT)); 
 %%% The prealloc results in much faster construct
-hpSPINS = X0;%%%just for test, you can delete it.
+%%% Just for the demo, in practice you could delete it.
+hpSPINS = X0;
 foptSPINSos(hpSPINS,wt0);
 %%% Here you could optimize hpSPINS together, but as it will slow down the
 %%% caculation, we do not recommend you to do that in the demo.
 
 vx2 = [real(wt);imag(wt)];
+disp(' ');
 disp('ADMM, please wait for a while');
 while (1) 
     %%% local SAR update
     vx0 = vx2;
-    fun = @(x)SARupdate(x,vx0);
-    nonlcon = @(x)SARcon(x,TR,RFA,dt);
-    iter = 10;
-    options = optimoptions('fmincon','MaxFunEvals',10^18,'TolFun',1e-10,'TolCon',1e-10,'TolX',1e-8,'MaxIter',iter,'Algorithm','sqp');
-    vx1 = fmincon(fun,vx0,[],[],[],[],[],[],nonlcon,options);
+    vx1 = localSARupSPINS(vx0,TR,RFA,dt);
 
     %%% FA update
     fun = @(x)FAIupdate(x,vx1);

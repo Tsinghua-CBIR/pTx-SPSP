@@ -2,18 +2,18 @@ function kpmse = foptKT(myKT)
 global A maskMS b1arr posarr nKT gamma b0mapMS phasetrack dt b off trel sysmat myfox wt passband stopband point_P point_S
 kp = zeros(3,24);
 
-% for group = 1:8
-%     kp(:,group*3-2) = zeros(3,1);
-%     kp(:,group*3-1) = -myKT(group*3-2:group*3);
-%     kp(:,group*3) = myKT(group*3-2:group*3);
-% end
+for group = 1:8
+    kp(:,group*3-2) = zeros(3,1);
+    kp(:,group*3-1) = -myKT(group*3-2:group*3);
+    kp(:,group*3) = myKT(group*3-2:group*3);
+end
 
-kp = reshape(myKT,[3,24]);
+% kp = reshape(myKT,[3,24]);
 
 
 for group = 1:8
     xxx = kp(:,group*3);
-    if xxx'*xxx>2500
+    if xxx'*xxx>5000 %Physical limitations to prevent KTpoints from running into unreasonable intervals
         kpmse = 99;
         return
     end
@@ -103,6 +103,11 @@ wt1 = wt;
 % 1000*(wt1'*wt1)
 
 kpmse = (abs(A*wt1)-abs(b))'*(abs(A*wt1)-abs(b))+4e5*(wt1'*wt1);
-% kpmse = (abs(A*wt1)-abs(b))'*(abs(A*wt1)-abs(b))+max(showSAR(wt))/8
+%%%The penalty for energy can be removed later without affecting the final result, 
+%%%as a regularization term was added during the solution. 
+%%%Adding a penalty here can avoid accidental occurrences
+
+% kpmse = (abs(A*wt1)-abs(b))'*(abs(A*wt1)-abs(b));
+%%%% It's OK to use this loss function as discussed in the paper
 % toc;
 end
