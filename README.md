@@ -5,7 +5,7 @@ Our pulse design algorithm involves two-step optimization, with the optimization
 
 If you use the toolbox, please consider citing the following paper:
 
-Xin Shao, Zhe Zhang, Xiaodong Ma, Fan Liu, Hua Guo, Kamil Ugurbil, Xiaoping Wu. Parallel transmission spatial spectral pulse design with local specific absorption rate control: demonstration for robust uniform water-selective excitation in the human brain at 7 Tesla. In press.
+Xin Shao, Zhe Zhang, Xiaodong Ma, Fan Liu, Hua Guo, Kamil Ugurbil, Xiaoping Wu. Parallel transmission spatial spectral pulse design with local specific absorption rate control: demonstration for robust uniform water-selective excitation in the human brain at 7 Tesla. In press. DOI: 10.1002/mrm.30346
 
 
 ### Copyright & License Notice
